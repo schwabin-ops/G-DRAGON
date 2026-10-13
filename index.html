@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fffaf0">
+<meta name="description" content="MBTI로 나와 닮은 포켓몬을 찾아보세요!">
+<title>포켓몬 MBTI | 나와 닮은 포켓몬 찾기</title>
+<style>
+:root{--bg:#fffaf0;--surface:#fff;--ink:#30291f;--muted:#8c8172;--primary:#ed981e;--primary-dark:#c97808;--line:#f0e6d4;--radius:24px;--shadow:0 12px 40px rgba(105,76,28,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 0% 0%,#fff0cf 0,transparent 35%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.65;min-height:100vh}button{font:inherit}button:focus-visible{outline:3px solid #e99a25;outline-offset:4px}.container{width:min(100% - 32px,680px);margin:auto}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(220,190,140,.3)}.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.6px}.brand-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:#ffebba;font-size:22px}.brand small{display:block;font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:700}.header-tag{color:var(--primary-dark);font-size:12px;font-weight:800;background:#fff0cf;border-radius:30px;padding:7px 12px}
+.hero{text-align:center;padding:54px 0 30px}.eyebrow{display:inline-flex;gap:7px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:30px;padding:7px 13px;font-size:12px;font-weight:800;color:var(--primary-dark)}h1{margin:19px 0 12px;font-size:clamp(29px,6vw,43px);letter-spacing:-2px;line-height:1.25}h1 span{color:var(--primary)}.hero p{color:var(--muted);margin:0;font-size:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,5vw,32px);box-shadow:var(--shadow)}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.section-head h2{font-size:18px;letter-spacing:-.5px;margin:0}.counter{font-size:12px;color:var(--muted);background:#f8f5ef;padding:5px 10px;border-radius:30px;white-space:nowrap}.types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.type-btn{min-width:0;padding:13px 2px;border:1px solid var(--line);border-radius:14px;background:#fffdf9;color:#655848;font-weight:850;font-size:14px;cursor:pointer;transition:transform .18s,border-color .18s,background .18s,color .18s}.type-btn:hover{border-color:#edbd67;transform:translateY(-2px)}.type-btn[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 5px 14px #ed981e35}.helper{margin:17px 0 0;font-size:12px;color:var(--muted);text-align:center}
+.result{display:none;margin-top:22px;overflow:hidden;border-radius:var(--radius);background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}.result.visible{display:block;animation:appear .4s ease both}@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.result-top{text-align:center;padding:34px 22px 28px;background:radial-gradient(circle at 50% 30%,#fff0c5 0,transparent 56%),#fffaf0}.result-label{font-size:11px;font-weight:900;letter-spacing:2px;color:var(--primary-dark)}.pokemon-emoji{width:110px;height:110px;margin:17px auto 13px;display:grid;place-items:center;background:#fff;border:1px solid #f3e5c9;border-radius:34px;font-size:61px;box-shadow:0 9px 28px #b98b3320}.pokemon-name{font-size:31px;line-height:1.3;letter-spacing:-1px;font-weight:950}.type-pill{display:inline-block;margin-top:12px;padding:5px 12px;border-radius:30px;background:#ffedc7;color:#a56305;font-size:12px;font-weight:850}.result-desc{max-width:400px;margin:13px auto 0;color:#776b5d;font-size:14px}.result-body{padding:24px}.info-card{background:#fffaf2;border:1px solid #f2e8d6;padding:17px;border-radius:16px;margin-bottom:12px}.info-title{display:flex;gap:9px;align-items:center;font-size:13px;font-weight:900;margin-bottom:7px}.info-card p{font-size:13px;color:#786c5d;margin:0}.match-row{display:flex;align-items:center;gap:12px}.match-icon{width:45px;height:45px;flex-shrink:0;border-radius:14px;background:#ffedc7;display:grid;place-items:center;font-size:23px}.match-row strong{display:block;font-size:15px}.match-row small{color:var(--muted);font-size:12px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.action-btn{padding:13px 8px;border-radius:13px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px;font-weight:850;cursor:pointer;transition:background .2s}.action-btn:hover{background:#fff6e4}.action-btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.action-btn.primary:hover{background:var(--primary-dark)}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,15px);background:#30291f;color:#fff;padding:11px 18px;border-radius:30px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:5;width:max-content;max-width:calc(100% - 32px)}#toast.show{opacity:1;transform:translate(-50%,0)}footer{text-align:center;padding:30px 0 35px;color:#a59a8a;font-size:11px}footer p{margin:5px 0}
+@media(max-width:390px){.types{gap:6px}.type-btn{font-size:12px;padding:12px 0}.panel{padding:17px}.header-tag{font-size:10px}.result-body{padding:17px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="container"><div class="brand"><div class="brand-icon" aria-hidden="true">⚡</div><div>POKÉ MBTI<small>PERSONALITY LAB</small></div></div><div class="header-tag">✨ 나만의 포켓몬</div></header>
+<main class="container">
+<section class="hero"><div class="eyebrow">🐣 YOUR PERSONALITY, YOUR POKÉMON</div><h1>나와 닮은 포켓몬은<br><span>누구일까?</span></h1><p>MBTI를 선택하고 나만의 포켓몬을 발견해 봐!</p></section>
+<section class="panel" aria-labelledby="select-title"><div class="section-head"><h2 id="select-title">🧩 나의 MBTI 선택하기</h2><span class="counter" id="counter">16 TYPES</span></div><div class="types" id="types" aria-label="MBTI 유형"></div><p class="helper">평소 나의 성격과 가장 가까운 유형을 선택해 줘.</p></section>
+<section class="result" id="result" aria-live="polite" aria-atomic="true"><div class="result-top"><div class="result-label">YOUR POKÉMON MATCH</div><div class="pokemon-emoji" id="pokemon-emoji" aria-hidden="true"></div><div class="pokemon-name" id="pokemon-name"></div><div class="type-pill" id="type-pill"></div><p class="result-desc" id="result-desc"></p></div><div class="result-body"><div class="info-card"><div class="info-title">💡 이런 매력이 있어!</div><p id="personality"></p></div><div class="info-card"><div class="info-title">💞 잘 맞는 MBTI</div><div class="match-row"><div class="match-icon" aria-hidden="true">💛</div><div><strong id="match-type"></strong><small id="match-desc"></small></div></div></div><div class="actions"><button class="action-btn primary" id="share-btn">↗ 결과 공유하기</button><button class="action-btn" id="reset-btn">↻ 다시 선택하기</button></div></div></section>
+</main>
+<footer class="container"><p>나만의 포켓몬을 찾아보는 MBTI 성격 놀이</p><p>본 결과는 오락 및 자기 탐색을 위한 비공식 콘텐츠입니다.</p><p>포켓몬 및 관련 명칭은 각 권리자의 지식재산입니다.</p></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+const P={
+ENFP:["피카츄","⚡","호기심 많고 활발한 분위기 메이커","INFJ"],
+ENFJ:["푸린","🎤","사람을 이끄는 따뜻한 리더","INFP"],
+ENTP:["파오리","🦆","재치 있는 아이디어 뱅크","INFJ"],
+ENTJ:["갸라도스","🌊","강한 추진력의 리더","INTP"],
+ESFP:["이상해꽃","🌻","밝고 사교적인 무드메이커","ISFJ"],
+ESFJ:["럭키","💗","곁을 챙기는 다정한 타입","ISFP"],
+ESTP:["리자몽","🔥","에너지 넘치는 모험가","ISTJ"],
+ESTJ:["코뿌리","🐗","책임감 강한 실행가","ISFP"],
+INFP:["이브이","🌸","여린 감성의 몽상가","ENFJ"],
+INFJ:["가디안","🌙","깊이 공감하는 조언자","ENFP"],
+INTP:["폴리곤","🧩","논리적인 탐구자","ENTJ"],
+INTJ:["뮤츠","🔮","전략적인 목표 지향형","ENFP"],
+ISFP:["치코리타","🌿","조용한 예술가 감성","ESFJ"],
+ISFJ:["밀탱크","🐄","든든히 지키는 수호자","ESTP"],
+ISTP:["팬텀","👻","손재주 좋은 문제해결사","ESFJ"],
+ISTJ:["거북왕","🐢","믿음직한 원칙주의자","ESFP"]
+};
+const EXTRA={
+ENFP:"새로운 경험을 즐기고 주변에 활기를 불어넣는 타입이야.",
+ENFJ:"다른 사람의 가능성을 발견하고 함께 성장하는 걸 좋아해.",
+ENTP:"새로운 관점과 재치 있는 아이디어로 문제를 풀어 가.",
+ENTJ:"목표를 세우고 계획을 실행하는 데 강점을 보여.",
+ESFP:"사람들과 어울리며 지금 이 순간을 즐기는 편이야.",
+ESFJ:"주변 사람들을 세심하게 살피고 관계를 소중히 여겨.",
+ESTP:"직접 경험하고 빠르게 행동하면서 해결책을 찾아.",
+ESTJ:"체계와 책임을 중요하게 생각하고 일을 확실하게 추진해.",
+INFP:"자신만의 가치와 풍부한 상상력을 소중히 여겨.",
+INFJ:"상대의 감정과 상황을 깊이 생각하는 편이야.",
+INTP:"원리를 분석하고 호기심을 깊이 파고드는 걸 좋아해.",
+INTJ:"장기적인 목표를 세우고 전략적으로 접근하는 편이야.",
+ISFP:"자신만의 감각과 취향을 자연스럽게 표현해.",
+ISFJ:"꾸준하고 세심하게 주변을 돕는 데 강점이 있어.",
+ISTP:"직접 살펴보고 실용적인 해결 방법을 찾는 편이야.",
+ISTJ:"약속과 원칙을 중요하게 여기고 꾸준히 실천해."
+};
+const $=id=>document.getElementById(id);
+const typeList=Object.keys(P);
+let selected=null,toastTimer;
+function notify(message){
+const toast=$("toast");toast.textContent=message;toast.classList.add("show");
+clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),2400);
+}
+function renderTypes(){
+const fragment=document.createDocumentFragment();
+typeList.forEach(type=>{
+const button=document.createElement("button");
+button.type="button";button.className="type-btn";button.textContent=type;
+button.setAttribute("aria-pressed","false");
+button.addEventListener("click",()=>show(type));fragment.appendChild(button);
+});
+$("types").replaceChildren(fragment);
+}
+function show(type){
+if(!Object.prototype.hasOwnProperty.call(P,type))return;
+selected=type;
+const [name,emoji,why,match]=P[type];
+$("types").querySelectorAll("button").forEach(button=>button.setAttribute("aria-pressed",String(button.textContent===type)));
+$("counter").textContent="SELECTED · "+type;
+$("pokemon-emoji").textContent=emoji;$("pokemon-name").textContent=name;
+$("type-pill").textContent="MY MBTI · "+type;
+$("result-desc").textContent=why+".";$("personality").textContent=EXTRA[type];
+$("match-type").textContent=match;
+$("match-desc").textContent="나와 다른 매력이 만나 좋은 시너지를 만들 수 있어!";
+const result=$("result");result.classList.remove("visible");void result.offsetWidth;result.classList.add("visible");
+result.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+}
+function getShareText(){
+if(!selected)return"";
+const [name,emoji,why,match]=P[selected];
+return `🐣 나의 포켓몬 MBTI 결과!\n\nMBTI: ${selected}\n포켓몬: ${emoji} ${name}\n성격: ${why}\n궁합 유형: ${match}\n\n너와 닮은 포켓몬도 찾아봐!`;
+}
+async function shareResult(){
+if(!selected)return;
+const text=getShareText();
+if(navigator.share){
+try{await navigator.share({title:"나의 포켓몬 MBTI",text});return;}
+catch(error){if(error.name==="AbortError")return;}
+}
+try{await navigator.clipboard.writeText(text);notify("결과를 복사했어! 친구에게 공유해 봐.");}
+catch{
+const area=document.createElement("textarea");area.value=text;area.setAttribute("readonly","");
+area.style.position="fixed";area.style.opacity="0";document.body.appendChild(area);area.select();
+const copied=document.execCommand("copy");area.remove();
+notify(copied?"결과를 복사했어!":"복사에 실패했어. 다시 시도해 줘.");
+}
+}
+function reset(){
+selected=null;$("result").classList.remove("visible");$("counter").textContent="16 TYPES";
+$("types").querySelectorAll("button").forEach(button=>button.setAttribute("aria-pressed","false"));
+$("select-title").scrollIntoView({behavior:"smooth",block:"center"});
+}
+$("share-btn").addEventListener("click",shareResult);
+$("reset-btn").addEventListener("click",reset);
+renderTypes();
+</script>
+</body>
+</html>
